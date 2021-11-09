@@ -41,8 +41,7 @@ rightColumnPic.render(`right_column_image`);;
 
 function getRandomIndices() {
 
-    // TODO: need to select randomly
-
+    // TODO: ne
     // Is there a way to shuffle an array?
 
     // grab first randomly, then grab second randomly (select again if second is == to first)
