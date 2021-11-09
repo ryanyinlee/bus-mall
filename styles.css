@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
 
-h1, p {
+h1, h2, h3, h4, h5, p {
     font-family: 'Rubik', sans-serif;
 }
 
@@ -12,9 +12,16 @@ h1, p {
     grid-template-rows: 20% 20% 20% 20% 20%;
 }
 
+#all-images {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    margin: 0 auto;
+}
+
 .left_column {
     grid-column-start: 2;
     grid-column-end: 3;
+    
 }
 
 .middle_column {
@@ -38,3 +45,4 @@ h1, p {
 #right_column_image {
     width: 250px;
 }
+
