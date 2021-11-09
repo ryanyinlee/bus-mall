@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+h1, p {
+    font-family: 'Rubik', sans-serif;
+}
+
+.grid {
+    display: grid;
+    width: 900px;
+    margin: 0 auto;
+    grid-template-columns: 5% 30% 30% 30% 5%;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+}
+
+.left_column {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.middle_column {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.right_column {
+    grid-column-start: 4;
+    grid-column-end: 5;
+}
+
+#left_column_image {
+    width: 250px;
+}
+
+#middle_column_image {
+    width: 250px;
+}
+
+#right_column_image {
+    width: 250px;
+}
