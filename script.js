@@ -55,7 +55,7 @@ else {
 if (maxClicks === totalClicks) {
 
     removeEventListeners();
-    //renderChart();
+    renderChart();
     renderList();
 }
 else {
@@ -138,11 +138,56 @@ function renderList() {
         const image = ImageObject.all[i];
         const liElem = document.createElement('li');
         ulElem.appendChild(liElem);
-        liElem.textContent = 'test';
+        liElem.textContent = image.name + " was clicked on " + image.clicks + " times and shown " + image.timesShown + " times.";
     }
 
 
 }
+
+function renderChart() {
+
+    const imageNamesArray = [];
+    const imageClicksArray = [];
+
+    for (let i = 0; i < ImageObject.all.length; i++) {
+        const image = ImageObject.all[i];
+
+        const singleImageName = image.name;
+        imageNamesArray.push(singleImageName);
+
+        const singleGoatVotes = image.clicks;
+        imageClicksArray.push(singleGoatVotes);
+    }
+
+    const ctx = document.getElementById('results-chart').getContext('2d');
+    const imageChart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: imageNamesArray,
+            datasets: [{
+                label: 'Product Votes',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: imageClicksArray
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
 
 // start area
 attachEventListeners();
