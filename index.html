@@ -10,34 +10,38 @@
         <h1 class>Bus Mall Product Survey</h1><br>
         <h3 id = "question">Which of these products do you like? Choose one.</h3>
     </header>
-    
+    <main>
     <secton id="all_images" class="grid">
     
         <div class="left-column">
             <img id = "left_column_image" src="assets/bag.jpg" alt="bag for test">
-            <p class="left_column_descriptor">Testing.</p>
+            <p class="left_column_descriptor"></p>
 
         </div>
 
         <div class="middle_column">
             <img id = "middle_column_image" src="assets/banana.jpg" alt="banana for test">
-            <p class="middle_column_descriptor">Testing.</p>
+            <p class="middle_column_descriptor"></p>
         </div>
 
 
         <div class="right_column">
             <img id = "right_column_image" src="assets/bathroom.jpg" alt="bathroom for test">
-            <p class="right_column_descriptor">Testing.</p>
+            <p class="right_column_descriptor"></p>
         </div>
-
-    
-    
+    </section>
+    <br><br>
+    <section id="results">
+        <ul id="results-list"></ul>
+        <canvas id="results-chart" width="500" height="500"></canvas> 
     </section>
 
+    
+    </main>
     <footer>
 
     </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     <script src="script.js"></script>
 </body>
 
