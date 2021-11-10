@@ -1,12 +1,8 @@
 'use strict';
 
-let totaClicks = 0;
+let totalClicks = 0;
+let maxClicks = 10;
 
-const clickLocation = document.getElementById('all_images');
-
-const leftClick = document.getElementById('left_column_image');
-const middleClick = document.getElementById('middle_column_image');
-const rightClick = document.getElementById('right_column_image');
 
 function ImageObject(name, filePath) {
     this.name = name;
@@ -14,158 +10,202 @@ function ImageObject(name, filePath) {
     this.timesShown = 0;
     ImageObject.all.push(this);
     this.clicks = 0;
-    this.timesShown = 0;
     // this.clickTimes();
 }
+ImageObject.all = [];
+ImageObject.left = null;
+ImageObject.middle = null;
+ImageObject.right = null;
 
-
-ImageObject.prototype.render = function (id) {
-    const imgElem = document.getElementById(id);
+ImageObject.prototype.render = function (side) {
+    const imgElem = document.getElementById(side + '_column_image');
     imgElem.src = this.filePath;
     imgElem.alt = this.name;
+    this.timesShown +=1;
 }
 
-ImageObject.all = [];
 
-const getRandomIndices = function() {
+function clickTimes (event) {
+    totalClicks += 1;
 
-    let leftIndex = Math.floor(Math.random()* ImageObject.all.length);
-    let middleIndex = Math.floor(Math.random()* ImageObject.all.length);
-    let rightIndex = Math.floor(Math.random()* ImageObject.all.length);
+    const targetId = event.target.id;
 
-    do {middleIndex = Math.floor(Math.random()* ImageObject.all.length);
-    }
-    while (leftIndex === middleIndex)
-    {
-        //console.log('left matched middle');
-    }
-    
-    if (middleIndex === rightIndex) {
 
-        do {rightIndex = Math.floor(Math.random()* ImageObject.all.length);
-        }
-        while (middleIndex === rightIndex)
-        
-        //console.log('left matched right');
-    }
 
-    if (leftIndex === rightIndex) {
-        
-        do {leftIndex = Math.floor(Math.random()* ImageObject.all.length);
-        }
-        while (leftIndex === rightIndex)
+    if (targetId === 'left_column_image') {
+
+       ImageObject.left.clicks+=1;
+       console.log(ImageObject.left.clicks);
 
     }
-  
-
-    // console.log(leftIndex, middleIndex, rightIndex);
-    return[leftIndex, middleIndex, rightIndex];
+    else if (targetId === 'middle_column_image') {
+        ImageObject.middle.clicks+=1;
+        console.log(ImageObject.middle.clicks);
 }
- 
-
-const clickTimes = function(event) {
-    //console.log('Clicked');
-        // Only 25 iterations.
-        if (totalClicks < 25){
-
-        }    
-        
-
-        const imageClicked = event.target;
-        const alt = imageClicked.alt;
-
-        
-        console.log(event.target.alt);
+else if (targetId === 'right_column_image') {
+        ImageObject.right.clicks+=1;
+        console.log(ImageObject.right.clicks);
+}
+else {
+    alert('Please select an image!');
+    return;
+}
 
 
-           // if (alt == 'bag') {
-        //     console.log('Bag were clicked.');
-        // }
-        
-        // if (id == 'right_column_image') {
-        //     this.imageClicked++;
-        //     this.timesShown++;
-            
-        //     console.log(imageClicked);
-        // }
+if (maxClicks === totalClicks) {
 
-        
-
-        // console.log(this.imageClicked);
-        // console.log(this.timesShown);
-        //console.log(event.target.id);
-
-        renderPics();
+    removeEventListeners();
+    //renderChart();
+    renderList();
+}
+else {
+    chooseImages();
+    renderPics(); 
     
 }
 
 
+}
 
+function giveMeRandom() {
+    const index = Math.floor(Math.random() * ImageObject.all.length);
+    return ImageObject.all[index];
+}
 
+function chooseImages() {
 
+    ImageObject.left = giveMeRandom();
 
+    do {ImageObject.middle = giveMeRandom();}
+    while (ImageObject.left === ImageObject.right || ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle )
 
+    do {ImageObject.right = giveMeRandom();}
+    while (ImageObject.left === ImageObject.right || ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle )
+     
 
+}
 
+function renderPics() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-function renderPics () {
-
-const safeIndices = getRandomIndices(); // an array of 3 random and unique in range indices
-
-const leftIndex = safeIndices[0];
-const middleIndex = safeIndices[1];
-const rightIndex = safeIndices[2];
-
-const leftColumnPic = ImageObject.all[leftIndex];//document.getElementById('left_column_image');
-const middleColumnPic = ImageObject.all[middleIndex];//document.getElementById('middle_column_image');
-const rightColumnPic = ImageObject.all[rightIndex];//document.getElementById('right_column_image');
-
-leftColumnPic.render(`left_column_image`);
-middleColumnPic.render(`middle_column_image`);
-rightColumnPic.render(`right_column_image`);;
+    ImageObject.left.render(`left`);
+    ImageObject.middle.render(`middle`);
+    ImageObject.right.render(`right`);
 
 }
 
 
-clickLocation.addEventListener('click', clickTimes);
+
+function attachEventListeners() {
+    const clickLocation = document.getElementById('all_images');
+    clickLocation.addEventListener('click', clickTimes);
+}
+
+function removeEventListeners() {
+    const clickLocation = document.getElementById('all_images');
+    clickLocation.removeEventListener('click', clickTimes);
+}
 
 
-new ImageObject('bag', 'assets/bag.jpg');
-new ImageObject('banana', 'assets/banana.jpg');
-new ImageObject('bathroom', 'assets/bathroom.jpg');
-new ImageObject('boots', 'assets/boots.jpg');
-new ImageObject('breakfast', 'assets/breakfast.jpg');
-new ImageObject('bubblegum', 'assets/bubblegum.jpg');
-new ImageObject('chair', 'assets/chair.jpg');
-new ImageObject('cthulhu', 'assets/cthulhu.jpg');
-new ImageObject('dog-duck', 'assets/dog-duck.jpg');
-new ImageObject('dragon', 'assets/dragon.jpg');
-new ImageObject('pen', 'assets/pen.jpg');
-new ImageObject('pet-sweep', 'assets/pet-sweep.jpg');
-new ImageObject('scissors', 'assets/scissors.jpg');
-new ImageObject('shark', 'assets/shark.jpg');
-new ImageObject('sweep', 'assets/sweep.png');
-new ImageObject('tauntaun', 'assets/tauntaun.jpg');
-new ImageObject('unicorn', 'assets/unicorn.jpg');
-new ImageObject('water-can', 'assets/water-can.jpg');
-new ImageObject('wine-glass', 'assets/wine-glass.jpg');
+function populateImages() {
+
+    new ImageObject('bag', 'assets/bag.jpg');
+    new ImageObject('banana', 'assets/banana.jpg');
+    new ImageObject('bathroom', 'assets/bathroom.jpg');
+    new ImageObject('boots', 'assets/boots.jpg');
+    new ImageObject('breakfast', 'assets/breakfast.jpg');
+    new ImageObject('bubblegum', 'assets/bubblegum.jpg');
+    new ImageObject('chair', 'assets/chair.jpg');
+    new ImageObject('cthulhu', 'assets/cthulhu.jpg');
+    new ImageObject('dog-duck', 'assets/dog-duck.jpg');
+    new ImageObject('dragon', 'assets/dragon.jpg');
+    new ImageObject('pen', 'assets/pen.jpg');
+    new ImageObject('pet-sweep', 'assets/pet-sweep.jpg');
+    new ImageObject('scissors', 'assets/scissors.jpg');
+    new ImageObject('shark', 'assets/shark.jpg');
+    new ImageObject('sweep', 'assets/sweep.png');
+    new ImageObject('tauntaun', 'assets/tauntaun.jpg');
+    new ImageObject('unicorn', 'assets/unicorn.jpg');
+    new ImageObject('water-can', 'assets/water-can.jpg');
+    new ImageObject('wine-glass', 'assets/wine-glass.jpg');
+
+}
+
+function renderList() {
+
+    const ulElem = document.getElementById('results-list');
+
+    for (let i = 0; i < ImageObject.all.length; i++) {
+        const image = ImageObject.all[i];
+        const liElem = document.createElement('li');
+        ulElem.appendChild(liElem);
+        liElem.textContent = 'test';
+    }
 
 
-getRandomIndices();
+}
+
+// start area
+attachEventListeners();
+populateImages();
+chooseImages();
 renderPics();
 
-console.log(ImageObject.all.name);
 
+
+
+
+// Old code below =========================================
+
+// const leftClick = document.getElementById('left_column_image');
+// const middleClick = document.getElementById('middle_column_image');
+// const rightClick = document.getElementById('right_column_image');
+
+// Old code below =========================================
+    // const leftIndex = safeIndices[0];
+    // const middleIndex = safeIndices[1];
+    // const rightIndex = safeIndices[2];
+
+    // const leftColumnPic = ImageObject.all[leftIndex];
+    // const middleColumnPic = ImageObject.all[middleIndex];
+    // const rightColumnPic = ImageObject.all[rightIndex];
+
+// Old code below =========================================
+
+//getRandomIndices();
+// const getRandomIndices = function () {
+
+    //     let leftIndex = Math.floor(Math.random() * ImageObject.all.length);
+    //     let middleIndex = Math.floor(Math.random() * ImageObject.all.length);
+    //     let rightIndex = Math.floor(Math.random() * ImageObject.all.length);
+    
+    //     do {
+    //         middleIndex = Math.floor(Math.random() * ImageObject.all.length);
+    //     }
+    //     while (leftIndex === middleIndex)
+    //     {
+    //         //console.log('left matched middle');
+    //     }
+    
+    //     if (middleIndex === rightIndex) {
+    
+    //         do {
+    //             rightIndex = Math.floor(Math.random() * ImageObject.all.length);
+    //         }
+    //         while (middleIndex === rightIndex)
+    
+    //         //console.log('left matched right');
+    //     }
+    
+    //     if (leftIndex === rightIndex) {
+    
+    //         do {
+    //             leftIndex = Math.floor(Math.random() * ImageObject.all.length);
+    //         }
+    //         while (leftIndex === rightIndex)
+    
+    //     }
+    
+    
+    //     // console.log(leftIndex, middleIndex, rightIndex);
+    //     return [leftIndex, middleIndex, rightIndex];
+    // }
