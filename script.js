@@ -1,7 +1,7 @@
 'use strict';
 
 let totalClicks = 0;
-let maxClicks = 10;
+let maxClicks = 25;
 
 
 function ImageObject(name, filePath) {
