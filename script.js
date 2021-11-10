@@ -76,11 +76,14 @@ function chooseImages() {
 
     ImageObject.left = giveMeRandom();
 
-    do {ImageObject.middle = giveMeRandom();}
-    while (ImageObject.left === ImageObject.right || ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle )
+    // if (ImageObject.left === ImageObject.right) {
+    //     ImageObject.right = giveMeRandom();
+    // }
 
-    do {ImageObject.right = giveMeRandom();}
-    while (ImageObject.left === ImageObject.right || ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle )
+    do {ImageObject.left = giveMeRandom(), ImageObject.middle = giveMeRandom(), ImageObject.right = giveMeRandom()}
+    while (ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle ||  ImageObject.left===ImageObject.right);
+
+  
      
 
 }
