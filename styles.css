@@ -36,14 +36,17 @@ h1, h2, h3, h4, h5, p {
 
 #left_column_image {
     width: 250px;
+    border: 3px solid darkgrey;
 }
 
 #middle_column_image {
     width: 250px;
+    border: 3px solid darkgrey;
 }
 
 #right_column_image {
     width: 250px;
+    border: 3px solid darkgrey;
 }
 
 #results {

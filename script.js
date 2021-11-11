@@ -21,48 +21,56 @@ ImageObject.prototype.render = function (side) {
     const imgElem = document.getElementById(side + '_column_image');
     imgElem.src = this.filePath;
     imgElem.alt = this.name;
-    this.timesShown +=1;
+    this.timesShown += 1;
 }
 
 
-function clickTimes (event) {
+function clickTimes(event) {
     totalClicks += 1;
 
     const targetId = event.target.id;
 
 
 
+
     if (targetId === 'left_column_image') {
 
-       ImageObject.left.clicks+=1;
-       console.log(ImageObject.left.clicks);
+        ImageObject.left.clicks += 1;
+        console.log(ImageObject.left.clicks);
 
     }
     else if (targetId === 'middle_column_image') {
-        ImageObject.middle.clicks+=1;
+        ImageObject.middle.clicks += 1;
         console.log(ImageObject.middle.clicks);
-}
-else if (targetId === 'right_column_image') {
-        ImageObject.right.clicks+=1;
+    }
+    else if (targetId === 'right_column_image') {
+        ImageObject.right.clicks += 1;
         console.log(ImageObject.right.clicks);
-}
-else {
-    alert('Please select an image!');
-    return;
-}
+    }
+    else {
+        alert('Please select an image!');
+        return;
+    }
 
 
-if (maxClicks === totalClicks) {
+    if (maxClicks === totalClicks) {
 
-    removeEventListeners();
-    renderChart();
-    renderList();
-}
-else {
-    chooseImages();
-    renderPics(); 
-    
-}
+        removeEventListeners();
+        renderList();
+        renderChart();        
+        localStorage.clear();
+
+   
+    }
+    else {
+        chooseImages();
+
+
+        renderPics();
+        storeClicks();
+
+
+    }
 
 
 }
@@ -72,21 +80,32 @@ function giveMeRandom() {
     return ImageObject.all[index];
 }
 
+
+// Choose images also checks for repeats.
 function chooseImages() {
 
-    ImageObject.left = giveMeRandom();
 
-    // if (ImageObject.left === ImageObject.right) {
-    //     ImageObject.right = giveMeRandom();
-    // }
 
-    do {ImageObject.left = giveMeRandom(), ImageObject.middle = giveMeRandom(), ImageObject.right = giveMeRandom()}
-    while (ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle ||  ImageObject.left===ImageObject.right);
 
-  
-     
+    const oldLeft = ImageObject.left;
+    const oldMiddle = ImageObject.middle;
+    const oldRight = ImageObject.right;
+    do {
+        ImageObject.left = giveMeRandom();
+    } while (ImageObject.left === oldLeft || ImageObject.left === oldMiddle || ImageObject.left === oldRight)
+    do {
+        ImageObject.middle = giveMeRandom();
+    } while (ImageObject.left === ImageObject.middle || ImageObject.middle === oldLeft || ImageObject.middle === oldMiddle || ImageObject.middle === oldRight);
+    do {
+        ImageObject.right = giveMeRandom();
+    } while ((ImageObject.left === ImageObject.right) || (ImageObject.middle === ImageObject.right || ImageObject.right === oldLeft || ImageObject.right === oldMiddle || ImageObject.right === oldRight));
+
+    // Thank you to Jordan Watts, Brian Thornburg, and Michael Metcalf
+
 
 }
+
+
 
 function renderPics() {
 
@@ -101,6 +120,7 @@ function renderPics() {
 function attachEventListeners() {
     const clickLocation = document.getElementById('all_images');
     clickLocation.addEventListener('click', clickTimes);
+
 }
 
 function removeEventListeners() {
@@ -108,28 +128,61 @@ function removeEventListeners() {
     clickLocation.removeEventListener('click', clickTimes);
 }
 
+function storeClicks() {
+
+        const clicksJSON = JSON.stringify(ImageObject.all);
+
+        localStorage.setItem('clicks', clicksJSON);
+
+        
+
+}
+
+function recreateClicks() {
+    
+    const clicksJSONRetrieve = localStorage.getItem('clicks');
+    
+    if (clicksJSONRetrieve) {
+            let oldObjects = JSON.parse(clicksJSONRetrieve);
+        
+        for (let i = 0; i < oldObjects.length; i += 1) {
+            oldObjects = oldObjects[i];
+            const reinstantiate = new ImageObject(oldObjects.name, oldObjects.filePath);
+            reinstantiate.clicks = oldObjects.clicks;
+            reinstantiate.timesShown = oldObjects.timesShown;
+
+
+
+        }
+    } else { 
+        populateImages();
+    }
+}
 
 function populateImages() {
 
-    new ImageObject('bag', 'assets/bag.jpg');
-    new ImageObject('banana', 'assets/banana.jpg');
-    new ImageObject('bathroom', 'assets/bathroom.jpg');
-    new ImageObject('boots', 'assets/boots.jpg');
-    new ImageObject('breakfast', 'assets/breakfast.jpg');
-    new ImageObject('bubblegum', 'assets/bubblegum.jpg');
-    new ImageObject('chair', 'assets/chair.jpg');
-    new ImageObject('cthulhu', 'assets/cthulhu.jpg');
-    new ImageObject('dog-duck', 'assets/dog-duck.jpg');
-    new ImageObject('dragon', 'assets/dragon.jpg');
-    new ImageObject('pen', 'assets/pen.jpg');
-    new ImageObject('pet-sweep', 'assets/pet-sweep.jpg');
-    new ImageObject('scissors', 'assets/scissors.jpg');
-    new ImageObject('shark', 'assets/shark.jpg');
-    new ImageObject('sweep', 'assets/sweep.png');
-    new ImageObject('tauntaun', 'assets/tauntaun.jpg');
-    new ImageObject('unicorn', 'assets/unicorn.jpg');
-    new ImageObject('water-can', 'assets/water-can.jpg');
-    new ImageObject('wine-glass', 'assets/wine-glass.jpg');
+
+        new ImageObject('bag', 'assets/bag.jpg');
+        new ImageObject('banana', 'assets/banana.jpg');
+        new ImageObject('bathroom', 'assets/bathroom.jpg');
+        new ImageObject('boots', 'assets/boots.jpg');
+        new ImageObject('breakfast', 'assets/breakfast.jpg');
+        new ImageObject('bubblegum', 'assets/bubblegum.jpg');
+        new ImageObject('chair', 'assets/chair.jpg');
+        new ImageObject('cthulhu', 'assets/cthulhu.jpg');
+        new ImageObject('dog-duck', 'assets/dog-duck.jpg');
+        new ImageObject('dragon', 'assets/dragon.jpg');
+        new ImageObject('pen', 'assets/pen.jpg');
+        new ImageObject('pet-sweep', 'assets/pet-sweep.jpg');
+        new ImageObject('scissors', 'assets/scissors.jpg');
+        new ImageObject('shark', 'assets/shark.jpg');
+        new ImageObject('sweep', 'assets/sweep.png');
+        new ImageObject('tauntaun', 'assets/tauntaun.jpg');
+        new ImageObject('unicorn', 'assets/unicorn.jpg');
+        new ImageObject('water-can', 'assets/water-can.jpg');
+        new ImageObject('wine-glass', 'assets/wine-glass.jpg');
+    
+
 
 }
 
@@ -147,7 +200,7 @@ function renderList() {
 
 }
 
-function renderChart() {
+function renderChart() { // taken directly from demo
 
     const imageNamesArray = [];
     const imageClicksArray = [];
@@ -158,8 +211,8 @@ function renderChart() {
         const singleImageName = image.name;
         imageNamesArray.push(singleImageName);
 
-        const singleGoatVotes = image.clicks;
-        imageClicksArray.push(singleGoatVotes);
+        const singleImageVotes = image.clicks;
+        imageClicksArray.push(singleImageVotes);
     }
 
     const ctx = document.getElementById('results-chart').getContext('2d');
@@ -193,14 +246,86 @@ function renderChart() {
 
 
 // start area
+recreateClicks();
 attachEventListeners();
 populateImages();
 chooseImages();
 renderPics();
 
 
+function oldCodeStorageBox() {
+
+// Old code below =========================================
+
+// Need to make it so the function also checks for repeats.
+
+// chooseImages grabs a left, middle, and a right
+// these images are put into the array
+// chooseImages will run again
+// it must check against the previous array
+// if any match, then choose images must run again
+// it will run up against the array again
+// if it doesn't run up against the array, then proceed
+
+//do I use two arrays? Or just use the same array and examine the same stuff inside?
+
+// function repeatCheck() {
+
+//     if (totalClicks > 0) {
+//         let currentArray = []; 
+//         currentArray.push(ImageObject.left.name, ImageObject.middle.name, ImageObject.right.name);
+//         console.log(currentArray);
+
+//         let indexAdjust = 3;
+//         indexAdjust = totalClicks * indexAdjust;
+
+//         for (let i=0; i < 3; i+=1) {
+//             if (currentArray[i] === compareArray[i]) {
+//                 console.log('current array is ' + currentArray[i]);
+//                 console.log('compare array is ' + compareArray[i]);
+//                 console.log('the bad thing happen');
+//             }
 
 
+
+//         }
+
+
+
+//     }
+
+
+// }
+
+// Old code below =========================================
+
+    // ImageObject.left = giveMeRandom();
+
+    // do {ImageObject.left = giveMeRandom(), ImageObject.middle = giveMeRandom(), ImageObject.right = giveMeRandom()}
+    // while (ImageObject.right===ImageObject.middle || ImageObject.left===ImageObject.middle ||  ImageObject.left===ImageObject.right);
+
+
+    // let oldImageLeft = ImageObject.left;
+    // let oldImageMiddle = ImageObject.middle;
+    // let oldImageRight = ImageObject.right;
+
+    // do {
+    //     ImageObject.left = giveMeRandom();
+    // } while (ImageObject.left === oldImageLeft || ImageObject.left === oldImageMiddle || ImageObject.left === oldImageRight);
+
+    // do {
+    //     ImageObject.middle = giveMeRandom();
+    // } while (ImageObject.left === oldImageLeft || ImageObject.left === oldImageMiddle || ImageObject.left === oldImageRight);
+
+    // do {
+    //     ImageObject.right = giveMeRandom();
+    // } while (ImageObject.left === oldImageLeft || ImageObject.left === oldImageMiddle || ImageObject.left === oldImageRight);
+
+
+    // compareArray.push(ImageObject.left.name, ImageObject.middle.name, ImageObject.right.name);
+
+    // repeatCheck();
+    // console.log(compareArray);
 
 // Old code below =========================================
 
@@ -225,7 +350,7 @@ renderPics();
     //     let leftIndex = Math.floor(Math.random() * ImageObject.all.length);
     //     let middleIndex = Math.floor(Math.random() * ImageObject.all.length);
     //     let rightIndex = Math.floor(Math.random() * ImageObject.all.length);
-    
+
     //     do {
     //         middleIndex = Math.floor(Math.random() * ImageObject.all.length);
     //     }
@@ -233,27 +358,28 @@ renderPics();
     //     {
     //         //console.log('left matched middle');
     //     }
-    
+
     //     if (middleIndex === rightIndex) {
-    
+
     //         do {
     //             rightIndex = Math.floor(Math.random() * ImageObject.all.length);
     //         }
     //         while (middleIndex === rightIndex)
-    
+
     //         //console.log('left matched right');
     //     }
-    
+
     //     if (leftIndex === rightIndex) {
-    
+
     //         do {
     //             leftIndex = Math.floor(Math.random() * ImageObject.all.length);
     //         }
     //         while (leftIndex === rightIndex)
-    
+
     //     }
-    
-    
+
+
     //     // console.log(leftIndex, middleIndex, rightIndex);
     //     return [leftIndex, middleIndex, rightIndex];
     // }
+    }
