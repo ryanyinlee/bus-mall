@@ -21,7 +21,6 @@ h1, h2, h3, h4, h5, p {
 .left_column {
     grid-column-start: 2;
     grid-column-end: 3;
-    
 }
 
 .middle_column {
@@ -34,17 +33,7 @@ h1, h2, h3, h4, h5, p {
     grid-column-end: 5;
 }
 
-#left_column_image {
-    width: 250px;
-    border: 3px solid darkgrey;
-}
-
-#middle_column_image {
-    width: 250px;
-    border: 3px solid darkgrey;
-}
-
-#right_column_image {
+#left_column_image, #middle_column_image, #right_column_image {
     width: 250px;
     border: 3px solid darkgrey;
 }
